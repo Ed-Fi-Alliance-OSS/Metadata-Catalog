@@ -1,18 +1,19 @@
 # Data Standard Metadata Collection and Usage — PRD
 
-| Field | Value |
-|---|---|
-| Status | Draft |
-| Owner | Stephen Fuqua |
-| Last Updated | 2026-06-01 |
-| Related Jira | TBD |
-| Source | `draft-1.txt` (converted from Word document) |
-
----
+- Status: Draft
+- Owner: Stephen Fuqua
+- Last Updated: 2026-06-01
+- Related Jira: TBD
 
 ## 1. Product Overview
 
-> _To be written._
+The **Data Standard Metadata Collection and Usage** initiative creates a suite of tools that collect, store, and analyze metadata about Ed-Fi Data Standard implementations — specifically the API specifications and supplemental data collection rules that state education agencies (SEAs) publish for vendors to implement.
+
+The core problem: vendor integration costs are a widely-cited barrier to expanding K-12 data access. Those costs stem from complex, aggregated, and inconsistent requirements across states. By systematically extracting SEA specification metadata into a structured repository, the initiative enables two high-value workflows: (1) a **scoring engine** that measures the complexity of each SEA's requirements, giving Ed-Fi staff actionable leverage to help states simplify and standardize; and (2) a **cluster analysis** that surfaces cross-state commonalities, identifying where the Ed-Fi Data Standard itself can be extended or clarified to reduce fragmentation.
+
+Beyond those primary goals, the repository supports additional use cases including a browsable specification viewer, a use case mapping library for vendors entering new markets, a natural language query interface, and an opportunity tracking system for Ed-Fi staff to log and monitor standardization conversations with SEAs.
+
+The system is intended for internal Ed-Fi Alliance use first, with selected capabilities exposed to SEA staff and vendors over time. It is explicitly scoped to metadata — no student data or PII flows through any component.
 
 ### 1.1 Strategic Alignment
 
@@ -51,23 +52,21 @@ These observations should be borne in mind when developing solutions for the req
 
 See [Section 3](#3-jobs-to-be-done) for detailed JTBD stories and acceptance criteria. Summary:
 
-| # | Job | Primary Persona | Priority |
-|---|---|---|---|
-| JTBD 1 | Scoring Engine | Ed-Fi Staff | Must have |
-| JTBD 2 | Cluster Analysis | Ed-Fi Staff | Must have |
-| JTBD 3 | Standardization of Data Collection Metadata | Ed-Fi Staff | Must have |
-| JTBD 4a | Storage of API Specifications | Ed-Fi Staff | Must have |
-| JTBD 4b | Viewing API Specifications | All | Must have (Staff) / Could have (others) |
-| JTBD 5 | Enrichment of API Specifications | Ed-Fi Staff | Must / Should have |
-| JTBD 6 | Storage Engine | Ed-Fi Staff | Must have |
-| JTBD 7 | Use Case Exploration | All | Could have |
-| JTBD 8 | Use Case Mapping | All | Could have |
-| JTBD 9 | Natural Language Query | All | Should have |
-| JTBD 10 | Opportunity Tracking | Ed-Fi Staff | Must have |
-| JTBD 11 | SEA Specification Dashboard | Ed-Fi Staff | Must have |
-| JTBD 12 | SEA Static Report | Ed-Fi Staff | Must have |
-
----
+| #       | Job                                         | Primary Persona | Priority                                |
+| ------- | ------------------------------------------- | --------------- | --------------------------------------- |
+| JTBD 1  | Scoring Engine                              | Ed-Fi Staff     | Must have                               |
+| JTBD 2  | Cluster Analysis                            | Ed-Fi Staff     | Must have                               |
+| JTBD 3  | Standardization of Data Collection Metadata | Ed-Fi Staff     | Must have                               |
+| JTBD 4  | Storage of API Specifications               | Ed-Fi Staff     | Must have                               |
+| JTBD 5  | Viewing API Specifications                  | All             | Must have (Staff) / Could have (others) |
+| JTBD 6  | Enrichment of API Specifications            | Ed-Fi Staff     | Must / Should have                      |
+| JTBD 7  | Storage Engine                              | Ed-Fi Staff     | Must have                               |
+| JTBD 8  | Use Case Exploration                        | All             | Could have                              |
+| JTBD 9  | Use Case Mapping                            | All             | Could have                              |
+| JTBD 11 | Natural Language Query                      | All             | Should have                             |
+| JTBD 12 | Opportunity Tracking                        | Ed-Fi Staff     | Must have                               |
+| JTBD 13 | SEA Specification Dashboard                 | Ed-Fi Staff     | Must have                               |
+| JTBD 14 | SEA Static Report                           | Ed-Fi Staff     | Must have                               |
 
 ## 2. Enterprise and System Context
 
@@ -84,8 +83,6 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 - The ideal central repository would use a hybrid model supporting:
   - Relational or document storage for use case mapping and opportunity tracking
   - Vector storage for semantic similarity searches
-
----
 
 ## 3. Jobs to Be Done
 
@@ -104,8 +101,6 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 
 **Priority:** Must have
 
----
-
 ### JTBD 2: Cluster Analysis
 
 **Story:** As Ed-Fi Staff — on behalf of Vendors — I want to run a periodic cluster analysis that looks for commonalities among different state data collection specifications, so that I can find market-driven (3+ states affected) opportunities to modify the Ed-Fi Data Standard and thereby reduce fragmentation across SEA specifications.
@@ -119,8 +114,6 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 
 **Priority:** Must have
 
----
-
 ### JTBD 3: Standardization of Data Collection Metadata
 
 **Story:** As Ed-Fi Staff, I want to extract data collection requirements from any SEA and store them in a standardized manner, so that I can analyze and help improve the SEA's requirements.
@@ -132,14 +125,12 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 
 **Depends on:**
 
-- JTBD 4a (Extraction of metadata from API specifications)
-- JTBD 5 (Extraction of additional metadata rules from other sources: spreadsheet, PDF, web, etc.)
+- JTBD 4 (Extraction of metadata from API specifications)
+- JTBD 6 (Extraction of additional metadata rules from other sources: spreadsheet, PDF, web, etc.)
 
 **Priority:** Must have
 
----
-
-### JTBD 4a: Storage of API Specifications
+### JTBD 4: Storage of API Specifications
 
 **Story:** As Ed-Fi Staff, I want to extract metadata from API specifications derived from the Ed-Fi Data Standard and/or extensions, so that I can use that metadata for various purposes and share the metadata with external users.
 
@@ -148,13 +139,11 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 - Automated conversion of either OpenAPI spec files and/or MetaEd files
 - Storage of extracted information in a standardized format
 
-**Depends on:** JTBD 6 (Storage Engine)
+**Depends on:** JTBD 7 (Storage Engine)
 
 **Priority:** Must have
 
----
-
-### JTBD 4b: Viewing API Specifications
+### JTBD 5: Viewing API Specifications
 
 **Story:** As any type of user, I want to view API specification details, so that I will be able to read and understand the state's data collection requirements.
 
@@ -162,16 +151,14 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 
 - User interface for filtering / drilling into Domains > Entities > Attributes
 
-**Depends on:** JTBD 6 (Storage Engine), JTBD 4a
+**Depends on:** JTBD 7 (Storage Engine), JTBD 4
 
 **Priority:**
 
 - Must have for Ed-Fi Staff
 - Could have for other personas
 
----
-
-### JTBD 5: Enrichment of API Specifications
+### JTBD 6: Enrichment of API Specifications
 
 **Story:** As Ed-Fi Staff, I want to extract additional data collection requirements from documentation supplementary to the API specifications, so that I can enrich the collected API specifications with the full range of information required for building integrations with the SEA's data collection API.
 
@@ -183,16 +170,14 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 - Must be able to override the automated conversion based on human judgment
 - While staff usage is the first priority, there may be a future requirement to assign ownership of the specification data to external users, allowing them to update / own the metadata. This does not need to be solved in the initial rollout.
 
-**Depends on:** JTBD 6 (Storage Engine)
+**Depends on:** JTBD 7 (Storage Engine)
 
 **Priority:**
 
 - Must have: the storage requirements
 - Should have: the automation requirements (MVP: while manual data entry is not desired, it should not be a complete blocker to progress toward JTBD 1 and 2)
 
----
-
-### JTBD 6: Storage Engine
+### JTBD 7: Storage Engine
 
 **Story:** As Ed-Fi Staff, I want to implement a storage engine for recording metadata that describes the API specification and other rules required for building a client-server integration with an SEA data collection API.
 
@@ -205,38 +190,36 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 
 **Resource-level fields:**
 
-| Column | Example |
-|---|---|
-| Model Name | `"ed-fi"` or the extension name |
-| Version | `5.2.0` |
-| Resource Name | `applicantProfiles` |
+| Column               | Example                                          |
+| -------------------- | ------------------------------------------------ |
+| Model Name           | `"ed-fi"` or the extension name                  |
+| Version              | `5.2.0`                                          |
+| Resource Name        | `applicantProfiles`                              |
 | Resource Description | The profile of the person making an application. |
-| Domains | `RecruitingAndStaffing` |
+| Domains              | `RecruitingAndStaffing`                          |
 
 **Property-level fields:**
 
-| Column | Example |
-|---|---|
-| Model Name | `"ed-fi"` or the extension name |
-| Version | `5.2.0` |
-| Resource Name | `applicantProfiles` |
-| Property Name | `lastSurname` |
+| Column               | Example                                          |
+| -------------------- | ------------------------------------------------ |
+| Model Name           | `"ed-fi"` or the extension name                  |
+| Version              | `5.2.0`                                          |
+| Resource Name        | `applicantProfiles`                              |
+| Property Name        | `lastSurname`                                    |
 | Property Description | The name borne in common by members of a family. |
-| Data Type | `string` |
-| Min Length | `0` |
-| Max Length | `75` |
-| Validation RegEx | `[A-Za-z\'\-\.]+` |
-| Is Identity Key | `false` |
-| Is Nullable | `false` |
-| Is Required | `true` |
+| Data Type            | `string`                                         |
+| Min Length           | `0`                                              |
+| Max Length           | `75`                                             |
+| Validation RegEx     | `[A-Za-z\'\-\.]+`                                |
+| Is Identity Key      | `false`                                          |
+| Is Nullable          | `false`                                          |
+| Is Required          | `true`                                           |
 
 **Depends on:** No further dependencies
 
 **Priority:** Must have
 
----
-
-### JTBD 7: Use Case Exploration
+### JTBD 8: Use Case Exploration
 
 **Story:** As any type of user, I want to explore the Ed-Fi Data Standard and state specifications by use case, so that I can learn how to build either a source or reporting system integration for that use case.
 
@@ -245,13 +228,11 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 - Accessible user interface for browsing and discovering use cases
 - Data dictionary mapping between the use case's data elements and the data element names in the specifications
 
-**Depends on:** JTBD 6 (Storage Engine), JTBD 3, JTBD 8 (Use Case Mapping)
+**Depends on:** JTBD 7 (Storage Engine), JTBD 3, JTBD 9 (Use Case Mapping)
 
 **Priority:** Could have
 
----
-
-### JTBD 8: Use Case Mapping
+### JTBD 9: Use Case Mapping
 
 **Story:** As any type of user, I want to load mappings between a use case and the Ed-Fi Data Standard or state specifications into the storage engine for end users to discover.
 
@@ -278,9 +259,7 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 - Could have
 - MVP: editing by Ed-Fi staff only
 
----
-
-### JTBD 9: Natural Language Query
+### JTBD 10: Natural Language Query
 
 **Story:** As any type of user, I want to use a natural language query to explore the Ed-Fi Data Standard and state specifications, so that I can find and synthesize information without manually building database queries.
 
@@ -298,13 +277,11 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 - "Rank the states by overall extension complexity"
 - "Which states are using Data Standard 6?"
 
-**Depends on:** JTBD 6 (Storage Engine), JTBD 3, JTBD 8 (Use Case Mapping)
+**Depends on:** JTBD 7 (Storage Engine), JTBD 3, JTBD 9 (Use Case Mapping)
 
 **Priority:** Should have
 
----
-
-### JTBD 10: Opportunity Tracking
+### JTBD 11: Opportunity Tracking
 
 **Story:** As Ed-Fi staff, I want to store notes about proposed changes and SEA responses so that I can track and report on the outcomes from the work to further standardize SEA data collections.
 
@@ -314,13 +291,11 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 - Must have: user interface accessible only to Ed-Fi staff
 - Could have (details to be determined): user interface accessible to other personas
 
-**Depends on:** JTBD 6 (Storage Engine), JTBD 3
+**Depends on:** JTBD 7 (Storage Engine), JTBD 3
 
 **Priority:** Must have
 
----
-
-### JTBD 11: SEA Specification Dashboard
+### JTBD 12: SEA Specification Dashboard
 
 **Story:** As Ed-Fi staff, I want to view a dashboard summarizing information about any given state specification, so that I can get a sense of the size, scope, and complexity of that specification.
 
@@ -336,16 +311,14 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 - Could have direct links to use case mappings that reference the state specification
 - Future option: make this available to external users, though the complexity analysis may need to remain private
 
-**Depends on:** JTBD 6 (Storage Engine), JTBD 3
+**Depends on:** JTBD 7 (Storage Engine), JTBD 3
 
 **Priority:**
 
 - Must have for Ed-Fi staff
 - Could have for external users
 
----
-
-### JTBD 12: SEA Static Report
+### JTBD 13: SEA Static Report
 
 **Story:** As Ed-Fi staff, I want to generate a static report, similar to the dashboard, so that I can distribute it to SEA staff for review.
 
@@ -354,11 +327,9 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 - Must be generated as a PDF
 - Should be created from an action on the user interface dashboard
 
-**Depends on:** JTBD 6 (Storage Engine), JTBD 3, JTBD 11 (Dashboard)
+**Depends on:** JTBD 7 (Storage Engine), JTBD 3, JTBD 12 (Dashboard)
 
 **Priority:** Must have
-
----
 
 ## 4. Non-Functional Requirements
 
@@ -411,60 +382,51 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 
 - **NFR-DATA-1:** Production database systems require standard weekly full backup, nightly differential backup, and documented rollback/restore processes.
 
----
-
 ## 5. System Architecture
 
-| Component | Description | Technology Candidates | Deployment Target |
-|---|---|---|---|
-| Metadata Storage Engine | Central repository for API specification metadata, use case mappings, and opportunity tracking | PostgreSQL (relational) + pgvector or CosmosDB (hybrid relational/vector) | Azure managed service |
-| API Specification Extractor | Converts OpenAPI / MetaEd files to standardized metadata | Python or C# ETL service | Azure container or function |
-| Document Enrichment Service | Extracts supplemental rules from spreadsheets, PDFs, web pages | Python (preferred) with LLM assistance | Azure container or function |
-| Scoring Engine | Classifies and scores attribute complexity | Python ML service | Azure container or function |
-| Cluster Analysis | Identifies commonalities across SEA specifications | Python ML / NLP service | Azure container or function (scheduled) |
-| Web Application | UI for browsing specs, dashboard, opportunity tracking, use case exploration | React or Alpine.js frontend + C#/TS backend | Azure App Service or Static Web App |
-| Natural Language Query Interface | Chat-based query layer over the metadata store | LLM + RAG over vector store | Azure container or managed AI service |
-| Identity Provider | Authentication and authorization for all services | Keycloak / Microsoft Entra ID / Salesforce SSO | Azure container or managed service |
-
----
+| Component                        | Description                                                                                    | Technology Candidates                                                     | Deployment Target                       |
+| -------------------------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | --------------------------------------- |
+| Metadata Storage Engine          | Central repository for API specification metadata, use case mappings, and opportunity tracking | PostgreSQL (relational) + pgvector or CosmosDB (hybrid relational/vector) | Azure managed service                   |
+| API Specification Extractor      | Converts OpenAPI / MetaEd files to standardized metadata                                       | Python or C# ETL service                                                  | Azure container or function             |
+| Document Enrichment Service      | Extracts supplemental rules from spreadsheets, PDFs, web pages                                 | Python (preferred) with LLM assistance                                    | Azure container or function             |
+| Scoring Engine                   | Classifies and scores attribute complexity                                                     | Python ML service                                                         | Azure container or function             |
+| Cluster Analysis                 | Identifies commonalities across SEA specifications                                             | Python ML / NLP service                                                   | Azure container or function (scheduled) |
+| Web Application                  | UI for browsing specs, dashboard, opportunity tracking, use case exploration                   | React or Alpine.js frontend + C#/TS backend                               | Azure App Service or Static Web App     |
+| Natural Language Query Interface | Chat-based query layer over the metadata store                                                 | LLM + RAG over vector store                                               | Azure container or managed AI service   |
+| Identity Provider                | Authentication and authorization for all services                                              | Keycloak / Microsoft Entra ID / Salesforce SSO                            | Azure container or managed service      |
 
 ## 6. Out of Scope and Known Limitations
 
 - **No student data or PII** — the systems described here operate on metadata only.
-- **External user ownership of specification data** (JTBD 5) — not required in the initial rollout; deferred to a future release.
-- **External user access to opportunity tracking** (JTBD 10) — details TBD; not in MVP.
-- **Public-facing complexity analysis** (JTBD 11) — complexity scores may need to remain private if the dashboard is opened to external users.
-- **Full automation accuracy** — 100% accuracy in automated document enrichment (JTBD 5) is not expected; 80% is acceptable for MVP.
+- **External user ownership of specification data** (JTBD 6) — not required in the initial rollout; deferred to a future release.
+- **External user access to opportunity tracking** (JTBD 11) — details TBD; not in MVP.
+- **Public-facing complexity analysis** (JTBD 12) — complexity scores may need to remain private if the dashboard is opened to external users.
+- **Full automation accuracy** — 100% accuracy in automated document enrichment (JTBD 6) is not expected; 80% is acceptable for MVP.
 - **High availability / scale-out** — not required given the expected low volume of use.
 - **MappingEDU feature parity** — this system is not intended to replicate MappingEDU; lessons learned from that project should inform scope decisions.
 
----
-
 ## 7. Open Questions and Decision Log
 
-| # | Question | Status | Decision / Notes |
-|---|---|---|---|
-| OQ-1 | Could [OpenMetadata](https://open-metadata.org/) satisfy any of these JTBDs? What are the multi-user and cost implications? | Open | Assumption: a bespoke system will be required, but this should be validated |
-| OQ-2 | Which OpenID Connect provider should be used? (Entra ID, Salesforce SSO, Keycloak) | Open | Keycloak appears most promising given prior experience and flexibility |
-| OQ-3 | Should vector storage be co-located with relational storage (e.g. pgvector) or a separate service? | Open | — |
-| OQ-4 | What is the PRD product overview / vision statement? | Open | Section 1 marked "to be written" |
-| OQ-5 | What Jira project(s) will track this work? | Open | — |
-| OQ-6 | What is the target release timeline / MVP definition by JTBD? | Open | — |
-
----
+| #    | Question                                                                                                                    | Status | Decision / Notes                                                            |
+| ---- | --------------------------------------------------------------------------------------------------------------------------- | ------ | --------------------------------------------------------------------------- |
+| OQ-1 | Could [OpenMetadata](https://open-metadata.org/) satisfy any of these JTBDs? What are the multi-user and cost implications? | Open   | Assumption: a bespoke system will be required, but this should be validated |
+| OQ-2 | Which OpenID Connect provider should be used? (Entra ID, Salesforce SSO, Keycloak)                                          | Open   | Keycloak appears most promising given prior experience and flexibility      |
+| OQ-3 | Should vector storage be co-located with relational storage (e.g. pgvector) or a separate service?                          | Open   | —                                                                           |
+| OQ-4 | What Jira project(s) will track this work?                                                                                  | Open   | —                                                                           |
+| OQ-5 | What is the target release timeline / MVP definition by JTBD?                                                               | Open   | —                                                                           |
 
 ## 8. Glossary
 
-| Term | Definition |
-|---|---|
-| Ed-Fi Data Standard | The Ed-Fi Alliance's canonical data model for K-12 education data exchange. |
-| SEA | State Education Agency — a state-level government body responsible for K-12 education policy and data collection. |
-| MetaEd | The Ed-Fi Alliance's domain-specific language for defining data model extensions. |
-| OpenAPI | A specification format for describing REST APIs (formerly Swagger). |
-| MappingEDU | A discontinued Ed-Fi Alliance tool for documenting and discovering data mappings (shut down ~2022). |
-| ETL | Extract, Transform, Load — a data integration pattern. |
-| RAG | Retrieval-Augmented Generation — an LLM technique that grounds responses in a retrieved document corpus. |
-| F1 Score | A measure of predictive accuracy combining precision and recall (used in JTBD 1 acceptance criteria). |
-| Cohen's Kappa | A statistical measure of inter-rater agreement, used here to assess scoring engine consistency. |
-| JTBD | Job to Be Done — a framework for describing user goals in terms of outcomes rather than features. |
-| PII | Personally Identifiable Information. |
+| Term                | Definition                                                                                                        |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| Ed-Fi Data Standard | The Ed-Fi Alliance's canonical data model for K-12 education data exchange.                                       |
+| SEA                 | State Education Agency — a state-level government body responsible for K-12 education policy and data collection. |
+| MetaEd              | The Ed-Fi Alliance's domain-specific language for defining data model extensions.                                 |
+| OpenAPI             | A specification format for describing REST APIs (formerly Swagger).                                               |
+| MappingEDU          | A discontinued Ed-Fi Alliance tool for documenting and discovering data mappings (shut down ~2022).               |
+| ETL                 | Extract, Transform, Load — a data integration pattern.                                                            |
+| RAG                 | Retrieval-Augmented Generation — an LLM technique that grounds responses in a retrieved document corpus.          |
+| F1 Score            | A measure of predictive accuracy combining precision and recall (used in JTBD 1 acceptance criteria).             |
+| Cohen's Kappa       | A statistical measure of inter-rater agreement, used here to assess scoring engine consistency.                   |
+| JTBD                | Job to Be Done — a framework for describing user goals in terms of outcomes rather than features.                 |
+| PII                 | Personally Identifiable Information.                                                                              |
