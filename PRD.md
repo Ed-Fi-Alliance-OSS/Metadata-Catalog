@@ -11,7 +11,7 @@ The **Data Standard Metadata Collection and Usage** initiative creates a suite o
 
 The core problem: vendor integration costs are a widely-cited barrier to expanding K-12 data access. Those costs stem from complex, aggregated, and inconsistent requirements across states. By systematically extracting SEA specification metadata into a structured repository, the initiative enables two high-value workflows: (1) a **scoring engine** that measures the complexity of each SEA's requirements, giving Ed-Fi staff actionable leverage to help states simplify and standardize; and (2) a **cluster analysis** that surfaces cross-state commonalities, identifying where the Ed-Fi Data Standard itself can be extended or clarified to reduce fragmentation.
 
-Beyond those primary goals, the repository supports additional use cases including a browsable specification viewer, a use case mapping library for vendors entering new markets, a natural language query interface, and an opportunity tracking system for Ed-Fi staff to log and monitor standardization conversations with SEAs.
+Beyond those primary goals, the repository supports additional use cases including a browseable specification viewer, a use case mapping library for vendors entering new markets, a natural language query interface, and an opportunity tracking system for Ed-Fi staff to log and monitor standardization conversations with SEAs.
 
 The system is intended for internal Ed-Fi Alliance use first, with selected capabilities exposed to SEA staff and vendors over time. It is explicitly scoped to metadata — no student data or PII flows through any component.
 
