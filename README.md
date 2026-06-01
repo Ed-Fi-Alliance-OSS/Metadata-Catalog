@@ -12,7 +12,7 @@ The system is intended for internal Ed-Fi Alliance use first, with selected capa
 
 ## Documentation
 
-* [Product Requirements Document](PRD.md)
+* [Product Requirements Document](./docs/PRD.md)
 
 ## Legal Information
 
