@@ -2,7 +2,7 @@
 
 * Status: Draft
 * Owner: Stephen Fuqua
-* Last Updated: 2026-06-01
+* Last Updated: 2026-06-02
 * Related Jira: TBD
 
 ## 1. Product Overview
@@ -14,6 +14,8 @@ The core problem: vendor integration costs are a widely-cited barrier to expandi
 Beyond those primary goals, the repository supports additional use cases including a browsable specification viewer, a use case mapping library for vendors entering new markets, a natural language query interface, and an opportunity tracking system for Ed-Fi staff to log and monitor standardization conversations with SEAs.
 
 The system is intended for internal Ed-Fi Alliance use first, with selected capabilities exposed to SEA staff and vendors over time. It is explicitly scoped to metadata — no student data or PII flows through any component.
+
+This PRD describes the full initiative scope, while delivery is expected to occur in phases. In other words, the JTBD priorities in this document indicate which capabilities matter across the initiative as a whole; they do not imply that every "must have" item is required in the first release.
 
 ### 1.1 Strategic Alignment
 
@@ -52,6 +54,8 @@ These observations should be borne in mind when developing solutions for the req
 
 See [Section 3](#3-jobs-to-be-done) for detailed JTBD stories and acceptance criteria. Summary:
 
+Priority labels in the table below are initiative-wide. Release scope is defined separately in the phased delivery model that follows.
+
 | #       | Job                                         | Primary Persona | Priority                                |
 | ------- | ------------------------------------------- | --------------- | --------------------------------------- |
 | JTBD 1  | Scoring Engine                              | Ed-Fi Staff     | Must have                               |
@@ -67,6 +71,45 @@ See [Section 3](#3-jobs-to-be-done) for detailed JTBD stories and acceptance cri
 | JTBD 11 | Opportunity Tracking                        | Ed-Fi Staff     | Must have                               |
 | JTBD 12 | SEA Specification Dashboard                 | Ed-Fi Staff     | Must have                               |
 | JTBD 13 | SEA Static Report                           | Ed-Fi Staff     | Must have                               |
+
+### 1.4 Phased Delivery
+
+The initiative should be delivered in phases so that Ed-Fi can validate value, control cost, and avoid overcommitting to later capabilities before the foundational workflows are proven.
+
+| Phase   | Objective                       | Indicative JTBD coverage                                                                                                                                                                                                                                                    |
+| ------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Phase 1 | Staff operational baseline      | JTBD 7, JTBD 4, JTBD 5 for Ed-Fi staff, and the minimum JTBD 6 capability needed to capture metadata in a usable form                                                                                                                                                      |
+| Phase 2 | Scoring and automated metadata extraction | JTBD 3, JTBD 1, JTBD 2, JTBD 11, JTBD 12, JTBD 13, plus the automated JTBD 6 enrichment needed to support repeatable internal analysis                                                                                                                                    |
+| Phase 3 | Use case mapping publication    | JTBD 8 and JTBD 9, including publication workflows that let users discover published use cases and mappings without yet opening non-staff editing                                                                                                                           |
+| Phase 4 | External contribution workflows | Expanded JTBD 9 contribution and governance workflows so non-staff users can create, edit, share, and maintain use case mappings under Ed-Fi-managed permissions and review controls, plus JTBD 10 as a later natural-language query capability built on the phased metadata and mapping foundation; JTBD 10 remains "Should have" but is sequenced later because it depends on those foundations |
+
+At the end of Phase 2, Ed-Fi may choose to stop further delivery if the internal repository, scoring, dashboard/reporting, and opportunity-tracking workflows are already delivering sufficient strategic value. Phases 3 and 4 are therefore best understood as later expansion options, not automatic commitments; if later phases do not justify their added cost and complexity, Ed-Fi should defer them.
+
+### 1.5 Go / No-Go Criteria
+
+Ed-Fi should apply explicit go / no-go gates when deciding whether to expand beyond Phase 2 and, if Phase 3 proceeds, whether to open Phase 4 scope.
+
+**Gate A — Post-Phase-2 expansion decision**
+
+Proceed beyond Phase 2 only if all of the following are true:
+
+* Ed-Fi staff are actively using the Phase 1-2 repository, scoring, dashboard/reporting, and opportunity-tracking workflows in regular operational work.
+* Metadata coverage and extraction quality are high enough that published use case mappings would be credible and maintainable without disproportionate manual cleanup.
+* There is a named business sponsor and a documented user need for publishing use case mappings beyond Ed-Fi staff.
+* The expected value of Phase 3 publication materially exceeds the added product, support, and governance complexity.
+
+If any of the above are not true, Ed-Fi should stop after Phase 2 and treat later phases as deferred.
+
+**Gate B — Post-Phase-3 external contribution decision**
+
+Proceed from Phase 3 to Phase 4 only if all of the following are true:
+
+* Published use case mappings are being used enough to demonstrate sustained demand from non-staff audiences.
+* There is clear evidence that read-only publication is insufficient and that non-staff users need to create or edit mappings directly.
+* Ed-Fi has defined the permission model, review workflow, and operational ownership needed to govern external contribution safely.
+* The support burden and authorization complexity of non-staff editing are justified by the incremental value of opening contribution workflows.
+
+If any of the above are not true, Ed-Fi should keep the product at Phase 3 and avoid opening external contribution workflows.
 
 ## 2. Enterprise and System Context
 
@@ -166,16 +209,16 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 
 * Automated conversion of documents such as spreadsheets, web pages, PDF files, etc.
 * Storage of extracted information in a standardized format
-* Given the variable nature of the source documents, it is not realistic to expect 100% accuracy from an automated conversion. 80% accuracy is acceptable, though 90% or better is desired.
+* Given the variable nature of the source documents, it is not realistic to expect 100% accuracy from an automated conversion. For Phases 1-2, 80% accuracy is acceptable; 90% or better remains the desired later-state target.
 * Must be able to override the automated conversion based on human judgment
-* While staff usage is the first priority, there may be a future requirement to assign ownership of the specification data to external users, allowing them to update / own the metadata. This does not need to be solved in the initial rollout.
+* While staff usage is the first priority, there may be a future requirement to assign ownership of the specification data to external users, allowing them to update / own the metadata. This does not need to be solved in the earlier phases.
 
 **Depends on:** JTBD 7 (Storage Engine)
 
 **Priority:**
 
 * Must have: the storage requirements
-* Should have: the automation requirements (MVP: while manual data entry is not desired, it should not be a complete blocker to progress toward JTBD 1 and 2)
+* Should have: the automation requirements (while manual data entry is not desired, it should not be a complete blocker during the earlier phases of the initiative)
 
 ### JTBD 7: Storage Engine
 
@@ -254,10 +297,13 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
   * Proposed
   * Published / used in production
 
+**Depends on:** JTBD 7 (Storage Engine), JTBD 3 (Standardization of Data Collection Metadata)
+
 **Priority:**
 
-* Could have
-* MVP: editing by Ed-Fi staff only
+Could have
+
+Phase note: in earlier phases, editing is limited to Ed-Fi staff.
 
 ### JTBD 10: Natural Language Query
 
@@ -280,6 +326,8 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 **Depends on:** JTBD 7 (Storage Engine), JTBD 3, JTBD 9 (Use Case Mapping)
 
 **Priority:** Should have
+
+Phase 4 note: strategically desirable, but intentionally deferred until the earlier metadata and mapping foundations are proven and in place.
 
 ### JTBD 11: Opportunity Tracking
 
@@ -398,10 +446,10 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 ## 6. Out of Scope and Known Limitations
 
 * **No student data or PII** — the systems described here operate on metadata only.
-* **External user ownership of specification data** (JTBD 6) — not required in the initial rollout; deferred to a future release.
-* **External user access to opportunity tracking** (JTBD 11) — details TBD; not in MVP.
+* **External user ownership of specification data** (JTBD 6) — not required in Phases 1-2; deferred unless later phases justify it.
+* **External user access to opportunity tracking** (JTBD 11) — details TBD; not part of Phases 1-2.
 * **Public-facing complexity analysis** (JTBD 12) — complexity scores may need to remain private if the dashboard is opened to external users.
-* **Full automation accuracy** — 100% accuracy in automated document enrichment (JTBD 6) is not expected; 80% is acceptable for MVP.
+* **Full automation accuracy** — 100% accuracy in automated document enrichment (JTBD 6) is not expected; 80% is acceptable for Phases 1-2.
 * **High availability / scale-out** — not required given the expected low volume of use.
 * **MappingEDU feature parity** — this system is not intended to replicate MappingEDU; lessons learned from that project should inform scope decisions.
 
@@ -413,7 +461,7 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 | OQ-2 | Which OpenID Connect provider should be used? (Entra ID, Salesforce SSO, Keycloak)                                          | Open   | Keycloak appears most promising given prior experience and flexibility      |
 | OQ-3 | Should vector storage be co-located with relational storage (e.g. pgvector) or a separate service?                          | Open   | —                                                                           |
 | OQ-4 | What Jira project(s) will track this work?                                                                                  | Open   | —                                                                           |
-| OQ-5 | What is the target release timeline / MVP definition by JTBD?                                                               | Open   | —                                                                           |
+| OQ-5 | What is the phased release approach and first stopping point by JTBD?                                                       | Resolved | See Sections 1.4 and 1.5; JTBD priorities are initiative-wide, not first-release scope |
 
 ## 8. Glossary
 
