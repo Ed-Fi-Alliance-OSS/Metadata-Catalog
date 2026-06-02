@@ -81,7 +81,7 @@ The initiative should be delivered in phases so that Ed-Fi can validate value, c
 | Phase 1 | Staff operational baseline      | JTBD 7, JTBD 4, JTBD 5 for Ed-Fi staff, and the minimum JTBD 6 capability needed to capture metadata in a usable form                                                                                                                                                      |
 | Phase 2 | Scoring and automated metadata extraction | JTBD 3, JTBD 1, JTBD 2, JTBD 11, JTBD 12, JTBD 13, plus the automated JTBD 6 enrichment needed to support repeatable internal analysis                                                                                                                                    |
 | Phase 3 | Use case mapping publication    | JTBD 8 and JTBD 9, including publication workflows that let users discover published use cases and mappings without yet opening non-staff editing                                                                                                                           |
-| Phase 4 | External contribution workflows | Expanded JTBD 9 contribution and governance workflows so non-staff users can create, edit, share, and maintain use case mappings under Ed-Fi-managed permissions and review controls, plus JTBD 10 as a later natural-language query capability built on the phased metadata and mapping foundation; JTBD 10 remains "Should have" but is sequenced later because it depends on those foundations |
+| Phase 4 | External contribution workflows | JTBD 9: expanded contribution and governance workflows so non-staff users can create, edit, share, and maintain use case mappings under Ed-Fi-managed permissions and review controls.<br><br>JTBD 10: later natural-language query capability built on the phased metadata and mapping foundation; it remains "Should have" and is sequenced later because it depends on those foundations. |
 
 At the end of Phase 2, Ed-Fi may choose to stop further delivery if the internal repository, scoring, dashboard/reporting, and opportunity-tracking workflows are already delivering sufficient strategic value. Phases 3 and 4 are therefore best understood as later expansion options, not automatic commitments; if later phases do not justify their added cost and complexity, Ed-Fi should defer them.
 
@@ -115,15 +115,15 @@ If any of the above are not true, Ed-Fi should keep the product at Phase 3 and a
 
 All jobs-to-be-done described in this PRD relate to **metadata**, not to the actual data collected by education organizations. No student data or other PII would flow through the systems built in support of these JTBDs.
 
-The architecture envisions a single metadata repository at the center of the JTBDs; however, further design work could conceivably lead to metadata being replicated in more than one repository format to achieve the stated goals.
+The current product direction assumes a single metadata repository at the center of the JTBDs; however, that remains a candidate approach rather than a settled product truth. Further design work could lead to metadata being replicated in more than one repository format if that better satisfies the stated constraints and goals.
 
 _[Architecture diagram placeholder — a 10,000-foot view diagram should be embedded here.]_
 
-**Architectural notes (open for resolution):**
+**Architectural notes (candidate direction, open for resolution):**
 
 * Could [OpenMetadata](https://open-metadata.org/) support any of this? What about multiple user types? At what cost?
-* Assumption: core requirements may require a bespoke system.
-* The ideal central repository would use a hybrid model supporting:
+* Working assumption: core requirements may require a bespoke system, but this has not yet been proven.
+* A likely repository direction would use a hybrid model supporting:
   * Relational or document storage for use case mapping and opportunity tracking
   * Vector storage for semantic similarity searches
 
@@ -135,10 +135,11 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 
 **Acceptance Criteria:**
 
-* 80% or better accuracy
+* Ed-Fi's existing manual scoring of several state specifications SHALL be treated as the initial ground-truth dataset for evaluation and tuning.
+* The scoring engine SHALL achieve 80% or better accuracy against that ground-truth dataset
 * 0.7+ F1 score overall, with 0.9+ F1 score for attributes deemed "simple"
 * 0.6+ Cohen's Kappa value
-* Must be able to override the assigned score based on human judgment
+* Ed-Fi staff MUST be able to override the assigned score based on human judgment
 
 **Depends on:** JTBD 3 (Standardization of Data Collection Metadata)
 
@@ -152,8 +153,10 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 
 * Minimal case: infer similarity from keyword matching
 * Preferred case: infer similarity from semantic matching
+* Outputs SHALL surface candidate commonalities for human review rather than make unattended standardization decisions.
+* During Phase 2, cluster analysis is exploratory; usefulness is demonstrated by surfacing patterns that staff judge worth reviewing, not by meeting a fixed precision threshold.
 
-**Depends on:** JTBD 3 (Standardized metadata storage for SEA specifications)
+**Depends on:** JTBD 3 (Standardization of Data Collection Metadata)
 
 **Priority:** Must have
 
@@ -163,8 +166,10 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 
 **Acceptance Criteria:**
 
-* Standardized data storage
-* Accessible to the scoring engine and other use cases
+* Standardized metadata storage
+* The standardized repository SHALL preserve provenance and curation status for each material metadata element, including whether it came from exact artifact import, inexact supplemental extraction, or manual editing.
+* Ed-Fi staff MUST be able to manually curate standardized metadata regardless of whether it originated from exact import or inexact extraction.
+* Accessible programmatically to the scoring engine and other downstream use cases
 
 **Depends on:**
 
@@ -179,8 +184,8 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 
 **Acceptance Criteria:**
 
-* Automated conversion of either OpenAPI spec files and/or MetaEd files
-* Storage of extracted information in a standardized format
+* Exact import of metadata from either OpenAPI artifacts and/or MetaEd artifacts
+* Storage of extracted information in a standardized format, with provenance indicating the originating artifact and import method
 
 **Depends on:** JTBD 7 (Storage Engine)
 
@@ -192,7 +197,8 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 
 **Acceptance Criteria:**
 
-* User interface for filtering / drilling into Domains > Entities > Attributes
+* Web-based GUI for filtering / drilling into Domains > Entities > Attributes
+* The web-based GUI SHALL support the provenance and confidence disclosures required by NFR-DATA-3
 
 **Depends on:** JTBD 7 (Storage Engine), JTBD 4
 
@@ -207,11 +213,12 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 
 **Acceptance Criteria:**
 
-* Automated conversion of documents such as spreadsheets, web pages, PDF files, etc.
-* Storage of extracted information in a standardized format
-* Given the variable nature of the source documents, it is not realistic to expect 100% accuracy from an automated conversion. For Phases 1-2, 80% accuracy is acceptable; 90% or better remains the desired later-state target.
-* Must be able to override the automated conversion based on human judgment
-* While staff usage is the first priority, there may be a future requirement to assign ownership of the specification data to external users, allowing them to update / own the metadata. This does not need to be solved in the earlier phases.
+* Inexact extraction of supplemental requirements from documents such as spreadsheets, web pages, PDF files, etc.
+* Storage of extracted information in a standardized format, with provenance and confidence indicators that distinguish supplemental extraction from exact artifact import
+* Given the variable nature of the source documents, it is not realistic to expect 100% accuracy from automated extraction. For Phases 1-2, 80% accuracy is acceptable; 90% or better remains the desired later-state target.
+* The stated enrichment accuracy thresholds are decision points for reviewing the cost/benefit of additional tuning and manual curation, not automatic completion points.
+* Ed-Fi staff MUST be able to manually review and edit enriched metadata based on human judgment
+* Future option: where explicitly enabled by Ed-Fi governance, SEA staff MAY be allowed to manually edit metadata; this does not need to be solved in the earlier phases.
 
 **Depends on:** JTBD 7 (Storage Engine)
 
@@ -228,7 +235,9 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 
 * The storage engine SHALL run in a managed service environment, preferentially in Azure
 * The storage engine SHALL support infrastructure-as-code deployment of schema
+* The storage engine SHALL support programmatic access for application workflows and analyst-friendly querying over the metadata repository
 * The storage engine SHALL support a query language
+* The storage engine SHALL store provenance, confidence, and curation status needed to distinguish exact imports, inexact supplemental extraction, and manual edits
 * Metadata to be stored SHALL include at least the following fields (and other fields as implied to fulfil other jobs-to-be-done):
 
 **Resource-level fields:**
@@ -268,7 +277,7 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 
 **Acceptance Criteria:**
 
-* Accessible user interface for browsing and discovering use cases
+* Web-based GUI for browsing and discovering use cases
 * Data dictionary mapping between the use case's data elements and the data element names in the specifications
 
 **Depends on:** JTBD 7 (Storage Engine), JTBD 3, JTBD 9 (Use Case Mapping)
@@ -285,7 +294,7 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 * Should have: ability to deprecate a mapping (and reverse)
 * Should have: ability to archive a mapping, hiding it from public view (and reverse)
 * Could have: other formats (to be determined)
-* Could have: GUI for manual CRUD operations
+* Could have: web-based GUI for manual CRUD operations
 * Could have: tracking of vendors or agencies who support or require a given use case
 * Should have — edit rights:
   * Original creator can edit the use case
@@ -327,7 +336,7 @@ Phase note: in earlier phases, editing is limited to Ed-Fi staff.
 
 **Priority:** Should have
 
-Phase 4 note: strategically desirable, but intentionally deferred until the earlier metadata and mapping foundations are proven and in place.
+Phase note: strategically desirable, but intentionally deferred until Phase 4, after the earlier metadata and mapping foundations are proven and in place.
 
 ### JTBD 11: Opportunity Tracking
 
@@ -336,8 +345,8 @@ Phase 4 note: strategically desirable, but intentionally deferred until the earl
 **Acceptance Criteria:**
 
 * Storage of free text notes and potentially pre-defined fields
-* Must have: user interface accessible only to Ed-Fi staff
-* Could have (details to be determined): user interface accessible to other personas
+* Must have: web-based GUI accessible only to Ed-Fi staff
+* Could have (details to be determined): web-based GUI accessible to other personas
 
 **Depends on:** JTBD 7 (Storage Engine), JTBD 3
 
@@ -373,7 +382,7 @@ Phase 4 note: strategically desirable, but intentionally deferred until the earl
 **Acceptance Criteria:**
 
 * Must be generated as a PDF
-* Should be created from an action on the user interface dashboard
+* Should be created from an action on the web-based GUI dashboard
 
 **Depends on:** JTBD 7 (Storage Engine), JTBD 3, JTBD 12 (Dashboard)
 
@@ -408,7 +417,7 @@ Phase 4 note: strategically desirable, but intentionally deferred until the earl
 
 ### NFR-SCALE: Scale and Availability
 
-* **NFR-SCALE-1:** Actual application use will be low volume. User interface applications need to be generally available during normal working hours, but do not require scale-out or high availability.
+* **NFR-SCALE-1:** Actual application use will be low volume. Web-based GUI applications need to be generally available during normal working hours, but do not require scale-out or high availability.
 
 ### NFR-LICENSE: Licensing
 
@@ -429,8 +438,12 @@ Phase 4 note: strategically desirable, but intentionally deferred until the earl
 ### NFR-DATA: Data Management
 
 * **NFR-DATA-1:** Production database systems require standard weekly full backup, nightly differential backup, and documented rollback/restore processes.
+* **NFR-DATA-2:** The metadata repository MUST retain provenance, confidence, and curation status sufficient to distinguish exact artifact imports, inexact supplemental extraction, and manual edits.
+* **NFR-DATA-3:** When provenance or confidence would reasonably change whether a user trusts or acts on displayed metadata—for example, when a value came from inexact supplemental extraction rather than exact artifact import—the web-based GUI MUST surface that context to the user.
 
 ## 5. System Architecture
+
+This section captures candidate architectural components and constraints that appear compatible with the current PRD. It is intended to guide later design work, not to assert that the final product architecture has already been settled.
 
 | Component                        | Description                                                                                    | Technology Candidates                                                     | Deployment Target                       |
 | -------------------------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | --------------------------------------- |
@@ -446,22 +459,26 @@ Phase 4 note: strategically desirable, but intentionally deferred until the earl
 ## 6. Out of Scope and Known Limitations
 
 * **No student data or PII** — the systems described here operate on metadata only.
+* **External participation in metadata curation or mapping workflows** — deferred pending evidence from Phases 1-2 and the explicit go / no-go gates for later phases.
 * **External user ownership of specification data** (JTBD 6) — not required in Phases 1-2; deferred unless later phases justify it.
-* **External user access to opportunity tracking** (JTBD 11) — details TBD; not part of Phases 1-2.
+* **External user access to opportunity tracking** (JTBD 11) — not part of Phases 1-2 and not assumed unless later evidence supports it.
 * **Public-facing complexity analysis** (JTBD 12) — complexity scores may need to remain private if the dashboard is opened to external users.
-* **Full automation accuracy** — 100% accuracy in automated document enrichment (JTBD 6) is not expected; 80% is acceptable for Phases 1-2.
+* **Cluster analysis** (JTBD 2) — exploratory until Phase 2 demonstrates that useful cross-state patterns can be surfaced for staff review.
+* **Full automation accuracy** — 100% accuracy in automated document enrichment (JTBD 6) is not expected; 80% is acceptable for Phases 1-2 as a review threshold, not as a declaration that tuning work is complete.
 * **High availability / scale-out** — not required given the expected low volume of use.
 * **MappingEDU feature parity** — this system is not intended to replicate MappingEDU; lessons learned from that project should inform scope decisions.
+* **Later phases may be skipped** — Ed-Fi should stop after Phase 2 if the ROI for publication, external contribution, or natural-language features is not compelling.
 
 ## 7. Open Questions and Decision Log
 
 | #    | Question                                                                                                                    | Status | Decision / Notes                                                            |
 | ---- | --------------------------------------------------------------------------------------------------------------------------- | ------ | --------------------------------------------------------------------------- |
-| OQ-1 | Could [OpenMetadata](https://open-metadata.org/) satisfy any of these JTBDs? What are the multi-user and cost implications? | Open   | Assumption: a bespoke system will be required, but this should be validated |
-| OQ-2 | Which OpenID Connect provider should be used? (Entra ID, Salesforce SSO, Keycloak)                                          | Open   | Keycloak appears most promising given prior experience and flexibility      |
-| OQ-3 | Should vector storage be co-located with relational storage (e.g. pgvector) or a separate service?                          | Open   | —                                                                           |
-| OQ-4 | What Jira project(s) will track this work?                                                                                  | Open   | —                                                                           |
-| OQ-5 | What is the phased release approach and first stopping point by JTBD?                                                       | Resolved | See Sections 1.4 and 1.5; JTBD priorities are initiative-wide, not first-release scope |
+| OQ-1 | Could [OpenMetadata](https://open-metadata.org/) satisfy any of these JTBDs? What are the multi-user and cost implications? | Open     | Working assumption: a bespoke system may be required, but this should be validated |
+| OQ-2 | Which OpenID Connect provider should be used? (Entra ID, Salesforce SSO, Keycloak)                                          | Open     | Keycloak appears most promising given prior experience and flexibility      |
+| OQ-3 | Should vector storage be co-located with relational storage (e.g. pgvector) or a separate service?                          | Open     | —                                                                           |
+| OQ-4 | What Jira project(s) will track this work?                                                                                  | Open     | —                                                                           |
+| OQ-5 | What evidence must Ed-Fi gather at each phase gate to justify proceeding beyond Phase 2 and, if applicable, beyond Phase 3? | Open     | Seed with Sections 1.4 and 1.5; convert those gate criteria into explicit review evidence as implementation proceeds |
+| OQ-6 | By the end of Phase 2, has cluster analysis surfaced enough useful candidate commonalities to justify continued investment?  | Open     | If not, keep it exploratory or defer further expansion work                 |
 
 ## 8. Glossary
 
@@ -472,6 +489,8 @@ Phase 4 note: strategically desirable, but intentionally deferred until the earl
 | MetaEd              | The Ed-Fi Alliance's domain-specific language for defining data model extensions.                                 |
 | OpenAPI             | A specification format for describing REST APIs (formerly Swagger).                                               |
 | MappingEDU          | A discontinued Ed-Fi Alliance tool for documenting and discovering data mappings (shut down ~2022).               |
+| Ground-truth dataset | A trusted set of examples already reviewed and scored by people, used as the reference point for checking how well an automated method performs. |
+| Curation status     | A simple label showing the current human-review or edit state of a metadata element, such as whether it was imported as-is, extracted from supplemental material, or manually edited. |
 | ETL                 | Extract, Transform, Load — a data integration pattern.                                                            |
 | RAG                 | Retrieval-Augmented Generation — an LLM technique that grounds responses in a retrieved document corpus.          |
 | F1 Score            | A measure of predictive accuracy combining precision and recall (used in JTBD 1 acceptance criteria).             |
