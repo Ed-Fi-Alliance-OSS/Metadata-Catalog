@@ -81,7 +81,9 @@ The initiative should be delivered in phases so that Ed-Fi can validate value, c
 | Phase 1 | Staff operational baseline      | JTBD 7, JTBD 4, JTBD 5 for Ed-Fi staff, and the minimum JTBD 6 capability needed to capture metadata in a usable form                                                                                                                                                      |
 | Phase 2 | Scoring and automated metadata extraction | JTBD 3, JTBD 1, JTBD 2, JTBD 11, JTBD 12, JTBD 13, plus the automated JTBD 6 enrichment needed to support repeatable internal analysis                                                                                                                                    |
 | Phase 3 | Use case mapping publication    | JTBD 8 and JTBD 9, including publication workflows that let users discover published use cases and mappings without yet opening non-staff editing                                                                                                                           |
-| Phase 4 | External contribution workflows | JTBD 9: expanded contribution and governance workflows so non-staff users can create, edit, share, and maintain use case mappings under Ed-Fi-managed permissions and review controls.<br><br>JTBD 10: later natural-language query capability built on the phased metadata and mapping foundation; it remains "Should have" and is sequenced later because it depends on those foundations. |
+| Phase 4 | External contribution workflows | JTBD 9: expanded contribution and governance workflows for non-staff users to create, edit, share, and maintain use case mappings under Ed-Fi-managed permissions and review controls.<br><br>JTBD 10 ("Should have"): later natural-language query capability, deferred until the metadata and mapping foundation is in place. |
+
+Phase 1 is intentionally valuable on its own: it gives Ed-Fi staff a usable internal repository and viewer for collecting, standardizing, and reviewing SEA specification metadata before scoring, dashboards, or later external-facing workflows are added.
 
 At the end of Phase 2, Ed-Fi may choose to stop further delivery if the internal repository, scoring, dashboard/reporting, and opportunity-tracking workflows are already delivering sufficient strategic value. Phases 3 and 4 are therefore best understood as later expansion options, not automatic commitments; if later phases do not justify their added cost and complexity, Ed-Fi should defer them.
 
@@ -308,9 +310,7 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 
 **Depends on:** JTBD 7 (Storage Engine), JTBD 3 (Standardization of Data Collection Metadata)
 
-**Priority:**
-
-Could have
+**Priority:** Could have
 
 Phase note: in earlier phases, editing is limited to Ed-Fi staff.
 
