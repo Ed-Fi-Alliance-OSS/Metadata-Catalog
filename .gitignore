@@ -1,2 +1,3 @@
 *.local.json
 .worktrees/
+docs/superpowers/
