@@ -89,5 +89,8 @@
     },
     "editor.codeActionsOnSave": {
         "source.fixAll.markdownlint": "explicit"
-    }
+    },
+    "cSpell.words": [
+        "browsable"
+    ]
 }
