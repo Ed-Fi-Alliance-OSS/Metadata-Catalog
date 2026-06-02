@@ -78,12 +78,12 @@ The initiative should be delivered in phases so that Ed-Fi can validate value, c
 
 | Phase   | Objective                       | Indicative JTBD coverage                                                                                                                                                                                                                                                    |
 | ------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Phase 1 | Staff operational baseline      | JTBD 7, JTBD 4, JTBD 5 for Ed-Fi staff, and the minimum JTBD 6 capability needed to capture metadata in a usable form                                                                                                                                                      |
-| Phase 2 | Scoring and automated metadata extraction | JTBD 3, JTBD 1, JTBD 2, JTBD 11, JTBD 12, JTBD 13, plus the automated JTBD 6 enrichment needed to support repeatable internal analysis                                                                                                                                    |
+| Phase 1 | Staff operational baseline      | JTBD 7, JTBD 4, JTBD 5 for Ed-Fi staff, the minimum JTBD 6 capability needed to capture metadata in a usable form, and the minimum JTBD 3 schema / provenance foundation needed to standardize and curate that metadata for later analysis                               |
+| Phase 2 | Scoring and automated metadata extraction | The broader JTBD 3 standardization workflow, plus JTBD 1, JTBD 2, JTBD 11, JTBD 12, JTBD 13, and the automated JTBD 6 enrichment needed to support repeatable internal analysis                                                                                           |
 | Phase 3 | Use case mapping publication    | JTBD 8 and JTBD 9, including publication workflows that let users discover published use cases and mappings without yet opening non-staff editing                                                                                                                           |
 | Phase 4 | External contribution workflows | JTBD 9: expanded contribution and governance workflows for non-staff users to create, edit, share, and maintain use case mappings under Ed-Fi-managed permissions and review controls.<br><br>JTBD 10 ("Should have"): later natural-language query capability, deferred until the metadata and mapping foundation is in place. |
 
-Phase 1 is intentionally valuable on its own: it gives Ed-Fi staff a usable internal repository and viewer for collecting, standardizing, and reviewing SEA specification metadata before scoring, dashboards, or later external-facing workflows are added.
+Phase 1 is intentionally valuable on its own: it gives Ed-Fi staff a usable internal repository and viewer for collecting, standardizing, and reviewing SEA specification metadata, including the minimum JTBD 3 schema / provenance model needed for usable metadata capture, before scoring, dashboards, or later external-facing workflows are added.
 
 At the end of Phase 2, Ed-Fi may choose to stop further delivery if the internal repository, scoring, dashboard/reporting, and opportunity-tracking workflows are already delivering sufficient strategic value. Phases 3 and 4 are therefore best understood as later expansion options, not automatic commitments; if later phases do not justify their added cost and complexity, Ed-Fi should defer them.
 
@@ -138,7 +138,8 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 **Acceptance Criteria:**
 
 * Ed-Fi's existing manual scoring of several state specifications SHALL be treated as the initial ground-truth dataset for evaluation and tuning.
-* The scoring engine SHALL achieve 80% or better accuracy against that ground-truth dataset
+* Before formal acceptance, Ed-Fi SHALL define the evaluation corpus used for scoring validation, expanding that manually scored set if needed so acceptance testing is credible.
+* The scoring engine SHALL achieve 80% or better accuracy against the defined evaluation corpus.
 * 0.7+ F1 score overall, with 0.9+ F1 score for attributes deemed "simple"
 * 0.6+ Cohen's Kappa value
 * Ed-Fi staff MUST be able to override the assigned score based on human judgment
@@ -217,7 +218,7 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 
 * Inexact extraction of supplemental requirements from documents such as spreadsheets, web pages, PDF files, etc.
 * Storage of extracted information in a standardized format, with provenance and confidence indicators that distinguish supplemental extraction from exact artifact import
-* Given the variable nature of the source documents, it is not realistic to expect 100% accuracy from automated extraction. For Phases 1-2, 80% accuracy is acceptable; 90% or better remains the desired later-state target.
+* Given the variable nature of the source documents, it is not realistic to expect 100% accuracy from automated extraction. When automated extraction is first deployed in Phase 2, 80% accuracy is acceptable; 90% or better remains the desired later-state target.
 * The stated enrichment accuracy thresholds are decision points for reviewing the cost/benefit of additional tuning and manual curation, not automatic completion points.
 * Ed-Fi staff MUST be able to manually review and edit enriched metadata based on human judgment
 * Future option: where explicitly enabled by Ed-Fi governance, SEA staff MAY be allowed to manually edit metadata; this does not need to be solved in the earlier phases.
@@ -312,7 +313,7 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 
 **Priority:** Could have
 
-Phase note: in earlier phases, editing is limited to Ed-Fi staff.
+Phase note: in Phase 3, editing remains limited to Ed-Fi staff; broader non-staff editing is deferred to Phase 4 and only if Gate B is met.
 
 ### JTBD 10: Natural Language Query
 
@@ -463,8 +464,8 @@ This section captures candidate architectural components and constraints that ap
 * **External user ownership of specification data** (JTBD 6) — not required in Phases 1-2; deferred unless later phases justify it.
 * **External user access to opportunity tracking** (JTBD 11) — not part of Phases 1-2 and not assumed unless later evidence supports it.
 * **Public-facing complexity analysis** (JTBD 12) — complexity scores may need to remain private if the dashboard is opened to external users.
-* **Cluster analysis** (JTBD 2) — exploratory until Phase 2 demonstrates that useful cross-state patterns can be surfaced for staff review.
-* **Full automation accuracy** — 100% accuracy in automated document enrichment (JTBD 6) is not expected; 80% is acceptable for Phases 1-2 as a review threshold, not as a declaration that tuning work is complete.
+* **Unattended standardization from cluster analysis** — JTBD 2 is intended to support staff review in Phase 2, not to make automatic standardization decisions without human judgment.
+* **Full automation accuracy** — 100% accuracy in automated document enrichment (JTBD 6) is not expected; when automation is first introduced in Phase 2, 80% is acceptable as a review threshold, not as a declaration that tuning work is complete.
 * **High availability / scale-out** — not required given the expected low volume of use.
 * **MappingEDU feature parity** — this system is not intended to replicate MappingEDU; lessons learned from that project should inform scope decisions.
 * **Later phases may be skipped** — Ed-Fi should stop after Phase 2 if the ROI for publication, external contribution, or natural-language features is not compelling.
