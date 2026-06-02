@@ -81,7 +81,7 @@ The initiative should be delivered in phases so that Ed-Fi can validate value, c
 | Phase 1 | Staff operational baseline      | JTBD 7, JTBD 4, JTBD 5 for Ed-Fi staff, the minimum JTBD 6 capability needed to capture metadata in a usable form, and the minimum JTBD 3 schema / provenance foundation needed to standardize and curate that metadata for later analysis                               |
 | Phase 2 | Scoring and automated metadata extraction | The broader JTBD 3 standardization workflow, plus JTBD 1, JTBD 2, JTBD 11, JTBD 12, JTBD 13, and the automated JTBD 6 enrichment needed to support repeatable internal analysis                                                                                           |
 | Phase 3 | Use case mapping publication    | JTBD 8 and JTBD 9, including publication workflows that let users discover published use cases and mappings without yet opening non-staff editing                                                                                                                           |
-| Phase 4 | External contribution workflows | JTBD 9: expanded contribution and governance workflows for non-staff users to create, edit, share, and maintain use case mappings under Ed-Fi-managed permissions and review controls.<br><br>JTBD 10 ("Should have"): later natural-language query capability, deferred until the metadata and mapping foundation is in place. |
+| Phase 4 | External contribution workflows | JTBD 9: expanded contribution and governance workflows for non-staff users to create, edit, share, and maintain use case mappings under Ed-Fi-managed permissions and review controls.<br><br>JTBD 10 ("Should have"): natural-language query may be pursued after the Phase 3 metadata and mapping foundation is in place; it does not require Gate B unless Ed-Fi chooses to pair NLQ delivery with broader non-staff contribution workflows. |
 
 Phase 1 is intentionally valuable on its own: it gives Ed-Fi staff a usable internal repository and viewer for collecting, standardizing, and reviewing SEA specification metadata, including the minimum JTBD 3 schema / provenance model needed for usable metadata capture, before scoring, dashboards, or later external-facing workflows are added.
 
@@ -169,10 +169,11 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 
 **Acceptance Criteria:**
 
-* Standardized metadata storage
+* Standardized metadata storage with a schema that can represent normalized metadata plus provenance and curation status
 * The standardized repository SHALL preserve provenance and curation status for each material metadata element, including whether it came from exact artifact import, inexact supplemental extraction, or manual editing.
+* Phase 1 minimum acceptance: Ed-Fi staff MUST be able to load, store, and manually curate standardized metadata in that repository even before any scoring or other downstream analytical consumer is delivered.
 * Ed-Fi staff MUST be able to manually curate standardized metadata regardless of whether it originated from exact import or inexact extraction.
-* Accessible programmatically to the scoring engine and other downstream use cases
+* Phase 2 downstream-consumer readiness: the standardized repository SHALL expose standardized metadata programmatically to the scoring engine and other downstream use cases once those consumers are introduced.
 
 **Depends on:**
 
@@ -229,6 +230,8 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 
 * Must have: the storage requirements
 * Should have: the automation requirements (while manual data entry is not desired, it should not be a complete blocker during the earlier phases of the initiative)
+
+Phase note: Phase 1 minimum acceptance is manual capture and storage of supplemental metadata with provenance / confidence indicators and staff reviewability; automated extraction is deferred to Phase 2.
 
 ### JTBD 7: Storage Engine
 
@@ -337,7 +340,7 @@ Phase note: in Phase 3, editing remains limited to Ed-Fi staff; broader non-staf
 
 **Priority:** Should have
 
-Phase note: strategically desirable, but intentionally deferred until Phase 4, after the earlier metadata and mapping foundations are proven and in place.
+Phase note: strategically desirable and intentionally deferred until after the Phase 3 metadata and mapping foundation is in place; Ed-Fi may pursue JTBD 10 independently of Gate B if NLQ is valuable without opening broader non-staff editing workflows.
 
 ### JTBD 11: Opportunity Tracking
 
@@ -478,7 +481,7 @@ This section captures candidate architectural components and constraints that ap
 | OQ-2 | Which OpenID Connect provider should be used? (Entra ID, Salesforce SSO, Keycloak)                                          | Open     | Keycloak appears most promising given prior experience and flexibility      |
 | OQ-3 | Should vector storage be co-located with relational storage (e.g. pgvector) or a separate service?                          | Open     | —                                                                           |
 | OQ-4 | What Jira project(s) will track this work?                                                                                  | Open     | —                                                                           |
-| OQ-5 | What evidence must Ed-Fi gather at each phase gate to justify proceeding beyond Phase 2 and, if applicable, beyond Phase 3? | Open     | Seed with Sections 1.4 and 1.5; convert those gate criteria into explicit review evidence as implementation proceeds |
+| OQ-5 | What evidence must Ed-Fi gather at each phase gate to justify proceeding beyond Phase 2 and, if applicable, beyond Phase 3? | Open     | Seed with Sections 1.4 and 1.5; convert those gate criteria into explicit review evidence such as staff usage logs, extraction-quality samples, sponsor sign-off, published-mapping usage metrics, governance workflow drafts, and support-cost estimates |
 | OQ-6 | By the end of Phase 2, has cluster analysis surfaced enough useful candidate commonalities to justify continued investment?  | Open     | If not, keep it exploratory or defer further expansion work                 |
 
 ## 8. Glossary
