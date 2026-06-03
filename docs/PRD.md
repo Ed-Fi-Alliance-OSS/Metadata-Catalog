@@ -52,9 +52,10 @@ These observations should be borne in mind when developing solutions for the req
 
 ### 1.3 Jobs to Be Done / User Journeys
 
-See [Section 3](#3-jobs-to-be-done) for detailed JTBD stories and acceptance criteria. Summary:
+See [Section 3](#3-jobs-to-be-done) for detailed JTBD stories and acceptance criteria. The table below provides a summary.
 
-Priority labels in the table below are initiative-wide. Release scope is defined separately in the phased delivery model that follows.
+> [!NOTE]
+>Priority labels in the table below are initiative-wide. Release scope is defined separately in the phased delivery model that follows.
 
 | #       | Job                                         | Primary Persona | Priority                                |
 | ------- | ------------------------------------------- | --------------- | --------------------------------------- |
@@ -81,7 +82,7 @@ The initiative should be delivered in phases so that Ed-Fi can validate value, c
 | Phase 1 | Staff operational baseline      | JTBD 7, JTBD 4, JTBD 5 for Ed-Fi staff, the minimum JTBD 6 capability needed to capture metadata in a usable form, and the minimum JTBD 3 schema / provenance foundation needed to standardize and curate that metadata for later analysis                               |
 | Phase 2 | Scoring and automated metadata extraction | The broader JTBD 3 standardization workflow, plus JTBD 1, JTBD 2, JTBD 11, JTBD 12, JTBD 13, and the automated JTBD 6 enrichment needed to support repeatable internal analysis                                                                                           |
 | Phase 3 | Use case mapping publication    | JTBD 8 and JTBD 9, including publication workflows that let users discover published use cases and mappings without yet opening non-staff editing                                                                                                                           |
-| Phase 4 | External contribution workflows | JTBD 9: expanded contribution and governance workflows for non-staff users to create, edit, share, and maintain use case mappings under Ed-Fi-managed permissions and review controls.<br><br>JTBD 10 ("Should have"): natural-language query may be pursued after the Phase 3 metadata and mapping foundation is in place; it does not require Gate B unless Ed-Fi chooses to pair NLQ delivery with broader non-staff contribution workflows. |
+| Phase 4 | External contribution workflows | JTBD 9: expanded contribution and governance workflows for non-staff users to create, edit, share, and maintain use case mappings under Ed-Fi-managed permissions and review controls.<br><br>JTBD 10 ("Should have"): natural-language query may be pursued after the Phase 3 metadata and mapping foundation is in place; it does not require Gate B (see below) unless Ed-Fi chooses to pair NLQ delivery with broader non-staff contribution workflows. |
 
 Phase 1 is intentionally valuable on its own: it gives Ed-Fi staff a usable internal repository and viewer for collecting, standardizing, and reviewing SEA specification metadata, including the minimum JTBD 3 schema / provenance model needed for usable metadata capture, before scoring, dashboards, or later external-facing workflows are added.
 
@@ -119,7 +120,37 @@ All jobs-to-be-done described in this PRD relate to **metadata**, not to the act
 
 The current product direction assumes a single metadata repository at the center of the JTBDs; however, that remains a candidate approach rather than a settled product truth. Further design work could lead to metadata being replicated in more than one repository format if that better satisfies the stated constraints and goals.
 
-_[Architecture diagram placeholder — a 10,000-foot view diagram should be embedded here.]_
+```mermaid
+graph TD
+
+    subgraph Cataloging
+        edfi@{ shape: doc, label: "Ed-Fi Data<br/> Standard" }
+        state1@{ shape: docs, label: "State 1 Spec" }
+        stateN@{ shape: docs, label: "State <i>n</i> Spec" }
+    end
+
+    subgraph Using
+        scoring[[Scoring Engine]]
+        dashboard[[Dashboards<br/>and Reports]]
+        opportunities[[Opportunity<br/>Tracking]]
+    end
+
+    subgraph MetaRepo[Metadata Platform]
+        repo[(repository)]
+    end
+
+    edfi --> |write| repo
+    state1 --> |write| repo
+    stateN --> |write| repo
+
+    scoring --> |read<br/>write| repo
+    dashboard --> |read| repo
+    opportunities --> |read<br/>write| repo
+
+    style Cataloging fill:#c4dcff
+    style Using fill:#fff0ca
+    style MetaRepo fill:#d4e9d8
+```
 
 **Architectural notes (candidate direction, open for resolution):**
 
@@ -140,8 +171,8 @@ _[Architecture diagram placeholder — a 10,000-foot view diagram should be embe
 * Ed-Fi's existing manual scoring of several state specifications SHALL be treated as the initial ground-truth dataset for evaluation and tuning.
 * Before formal acceptance, Ed-Fi SHALL define the evaluation corpus used for scoring validation, expanding that manually scored set if needed so acceptance testing is credible.
 * The scoring engine SHALL achieve 80% or better accuracy against the defined evaluation corpus.
-* 0.7+ F1 score overall, with 0.9+ F1 score for attributes deemed "simple"
-* 0.6+ Cohen's Kappa value
+* 0.7+ F1 score overall compared with evaluation corpus, with 0.9+ F1 score for attributes deemed "simple" (score of zero)
+* 0.6+ Cohen's Kappa value compared with evaluation corpus
 * Ed-Fi staff MUST be able to override the assigned score based on human judgment
 
 **Depends on:** JTBD 3 (Standardization of Data Collection Metadata)
@@ -397,7 +428,7 @@ Phase note: strategically desirable and intentionally deferred until after the P
 ### NFR-TECH: Technology Stack
 
 * **NFR-TECH-1:** Backend transactional services MUST use either C# or JavaScript/TypeScript.
-* **NFR-TECH-2:** Backend data processing services (scoring engine, ETL) SHOULD use Python (preferred), JavaScript, or C#.
+* **NFR-TECH-2:** Backend data processing services (scoring engine, ETL) MUST use Python (preferred), JavaScript, or C#.
 * **NFR-TECH-3:** Frontend services SHOULD use either React or Alpine.js.
 * **NFR-TECH-4:** Data storage SHOULD utilize either managed PostgreSQL or CosmosDB unless there is a strongly compelling reason and comparative cost analysis for an alternative.
 
@@ -409,6 +440,8 @@ Phase note: strategically desirable and intentionally deferred until after the P
   * Staging / UAT
   * Production
 * **NFR-CICD-3:** The system will be maintained by Ed-Fi Alliance staff.
+* **NFR-CICD-4:** Ed-Fi staff will monitor and maintain the system, including applying security patches, updating dependencies, and addressing any operational issues that arise.
+* **NFR-CICD-5:** Ed-Fi staff will determine appropriate data retention and backup policies to the metadata repository, consistent with the importance of that data and the cost of storage.
 
 ### NFR-TEST: Testing
 
@@ -451,14 +484,16 @@ This section captures candidate architectural components and constraints that ap
 
 | Component                        | Description                                                                                    | Technology Candidates                                                     | Deployment Target                       |
 | -------------------------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | --------------------------------------- |
-| Metadata Storage Engine          | Central repository for API specification metadata, use case mappings, and opportunity tracking | PostgreSQL (relational) + pgvector or CosmosDB (hybrid relational/vector) | Azure managed service                   |
+| Metadata Storage Engine          | Central repository for API specification metadata, use case mappings, and opportunity tracking | PostgreSQL (relational) + pgvector[^1] or CosmosDB (hybrid document/vector) | Azure managed service                   |
 | API Specification Extractor      | Converts OpenAPI / MetaEd files to standardized metadata                                       | Python or C# ETL service                                                  | Azure container or function             |
 | Document Enrichment Service      | Extracts supplemental rules from spreadsheets, PDFs, web pages                                 | Python (preferred) with LLM assistance                                    | Azure container or function             |
-| Scoring Engine                   | Classifies and scores attribute complexity                                                     | Python ML service                                                         | Azure container or function             |
+| Scoring Engine                   | Classifies and scores attribute complexity                                                     | Python LLM/ML service                                                         | Azure container or function             |
 | Cluster Analysis                 | Identifies commonalities across SEA specifications                                             | Python ML / NLP service                                                   | Azure container or function (scheduled) |
 | Web Application                  | UI for browsing specs, dashboard, opportunity tracking, use case exploration                   | React or Alpine.js frontend + C#/TS backend                               | Azure App Service or Static Web App     |
 | Natural Language Query Interface | Chat-based query layer over the metadata store                                                 | LLM + RAG over vector store                                               | Azure container or managed AI service   |
 | Identity Provider                | Authentication and authorization for all services                                              | Keycloak / Microsoft Entra ID / Salesforce SSO                            | Azure container or managed service      |
+
+[^1]: vector storage may be need for semantic search capabilities in the cluster analysis and natural language query components.
 
 ## 6. Out of Scope and Known Limitations
 
