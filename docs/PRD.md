@@ -50,7 +50,7 @@ These observations should be borne in mind when developing solutions for the req
 
 3. **Vendors** — whether a business analyst or a programmer, vendor staff need to build integrations with the Ed-Fi Data Standard. They are looking to minimize their cost to build an integration through true standardization across states. In addition, they may be looking for existing use case mappings when trying to break into a new market.
 
-### 1.3 Jobs to Be Done / User Journeys
+### 1.3 Jobs to Be Done
 
 See [Section 3](#3-jobs-to-be-done) for detailed JTBD stories and acceptance criteria. The table below provides a summary.
 
@@ -72,6 +72,8 @@ See [Section 3](#3-jobs-to-be-done) for detailed JTBD stories and acceptance cri
 | JTBD 11 | Opportunity Tracking                        | Ed-Fi Alliance Staff | Must have                               |
 | JTBD 12 | SEA Specification Dashboard                 | Ed-Fi Alliance Staff | Must have                               |
 | JTBD 13 | SEA Static Report                           | Ed-Fi Alliance Staff | Must have                               |
+| JTBD 14 | Human Review                                | Ed-Fi Alliance Staff | Must have                               |
+| JTBD 15 | MetaEd Author Feedback                      | Ed-Fi Alliance Staff | Could have                              |
 
 ### 1.4 Phased Delivery
 
@@ -99,6 +101,10 @@ JTBD 8 and JTBD 9, including publication workflows that let users discover publi
 JTBD 9: expanded contribution and governance workflows for non-staff users to create, edit, share, and maintain use case mappings under Ed-Fi-managed permissions and review controls.
 
 JTBD 10 ("Should have"): natural-language query may be pursued after the Phase 3 metadata and mapping foundation is in place; it does not require Gate B (see below) unless Ed-Fi chooses to pair NLQ delivery with broader non-staff contribution workflows.
+
+#### Phase 5: Other use cases and capabilities
+
+JTBDs and potential future use cases, such as: AI skills, MetaEd in-app feedback, and/or other use cases that may emerge over time. These might not be dependent on other phases, so they could be pursued independently if there is a clear value case.
 
 ### 1.5 Go / No-Go Criteria
 
@@ -181,9 +187,9 @@ graph TD
 **Acceptance Criteria:**
 
 - Ed-Fi Alliance's existing manual scoring SHALL seed the evaluation set, treated as **human-scored observations** (used to measure agreement), not infallible ground truth. Before formal acceptance, Ed-Fi SHALL define the evaluation set and SHOULD grow it — ideally with more than one reviewer — so acceptance testing is credible.
-- >= 80% score-tier alignment on rows scored by both the engine and a reviewer.
-- >= 0.7 F1 overall and >= 0.9 F1 for "simple" (score-zero) rows, measured against the evaluation set as a calibration signal (not proof of correctness).
-- >= 0.6 Cohen's Kappa (inter-rater agreement).
+- ≥ 80% score-tier alignment on rows scored by both the engine and a reviewer.
+- ≥ 0.7 F1 overall and ≥ 0.9 F1 for "simple" (score-zero) rows, measured against the evaluation set as a calibration signal (not proof of correctness).
+- ≥ 0.6 Cohen's Kappa (inter-rater agreement).
 - Where the engine and a reviewer disagree on tier, treat those rows as the calibration target — they may point to a methodology question, not just an engine error, so route them to review rather than tuning them away to match one reviewer.
 - Ed-Fi Alliance Staff MUST be able to override the assigned score based on human judgment, with the override and rationale recorded against the row's evidence record.
 - **NACHOS Score Context (peer signal).** Every scored row SHALL carry, beside the scalar: _Implementation Shape_ (structural complexity, deterministic from the Swagger/API model), _Documentation Style_ (Prescriptive | Conceptual | Cross-reference | Regulatory | Unspecified), and _Documentation Gap_ (complex structure the documentation under-explains).
@@ -251,8 +257,8 @@ graph TD
 
 **Acceptance Criteria:**
 
-- Web-based GUI for filtering / drilling into Domains > Entities > Attributes
-- The web-based GUI SHALL support the provenance and confidence disclosures required by NFR-DATA-3
+- Web-based UI for filtering / drilling into Domains > Entities > Attributes
+- The UI SHALL support the provenance and confidence disclosures required by NFR-DATA-3
 
 **Depends on:** JTBD 7 (Storage Engine), JTBD 4
 
@@ -295,6 +301,7 @@ Phase note: Phase 1 minimum acceptance is manual capture and storage of suppleme
 - The storage engine SHALL support a query language
 - The storage engine SHALL store provenance, confidence, and curation status needed to distinguish exact imports, inexact supplemental extraction, and manual edits
 - Metadata to be stored SHALL include at least the following fields (and other fields as implied to fulfil other jobs-to-be-done):
+- The storage engine SHALL store multiple versions of the Data Standard and/or state specification, so that a new version does not overwrite data from a prior version
 
 **Resource-level fields:**
 
@@ -381,7 +388,7 @@ Phase note: in Phase 3, editing remains limited to Ed-Fi Alliance Staff; broader
 **Acceptance Criteria:**
 
 - Accessible through a chat interface (e.g. in a web application, Slack, or connected to a conversational AI system)
-- Must obey the authorization patterns established for the metadata; for example, only allowing Ed-Fi Alliance Staff to access opportunity tracking data
+- Must obey the authorization patterns established for the metadata; for example, opportunity tracking data should only be accessible to Ed-Fi Alliance Staff
 - Should store user queries for diagnostic purposes
 - Should allow users to provide feedback on the responses, for diagnostic purposes
 
@@ -447,6 +454,35 @@ Phase note: strategically desirable and intentionally deferred until after the P
 **Depends on:** JTBD 7 (Storage Engine), JTBD 3, JTBD 12 (Dashboard)
 
 **Priority:** Must have
+
+### JTBD 14: Human Review
+
+**Story:** As Ed-Fi Alliance Staff, I want to review auto-generated state metadata, so that I can approve and/or modify them manually.
+
+**Acceptance Criteria:**
+
+- The UI MUST have a queue showing new results that require review, with a label of "status: pending"
+- The UI MUST allow the reviewer to mark as approved, which will set "status: approved"
+- The UI MUST allow the reviewer to mark as rejected, which will set "status: rejected" (implies further work is needed, but could not be provided at that time)
+- The UI MUST allow the reviewer to update any data  manually, which will set "status: updated"
+  - When updating existing data, the system MUST retain the historical information for comparison
+  - When updating existing data, the system MUST require the user to provide evidence information
+
+**Depends on:** JTBD 12
+
+### JTBD 15: MetaEd Author Feedback
+
+**Story:** As any persona, when developing a MetaEd model file, I want feedback on implementation shape and documentation gaps, so that I have early signals of improvement opportunities.
+
+**Acceptance Criteria**:
+
+- Must be actionable signals
+- Warnings MUST NOT block the Build and Deployment processes
+
+**MVP:**
+
+- A skills-based approach for local agentic "code review" could satisfy this JTBD
+- However, the ideal system would run synchronously in the MetaEd BUILD command
 
 ## 4. Non-Functional Requirements
 
