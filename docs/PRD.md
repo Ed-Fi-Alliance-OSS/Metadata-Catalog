@@ -191,7 +191,7 @@ graph TD
 - ≥ 0.7 F1 overall and ≥ 0.9 F1 for "simple" (score-zero) rows, measured against the evaluation set as a calibration signal (not proof of correctness).
 - ≥ 0.6 Cohen's Kappa (inter-rater agreement).
 - Where the engine and a reviewer disagree on tier, treat those rows as the calibration target — they may point to a methodology question, not just an engine error, so route them to review rather than tuning them away to match one reviewer.
-- Ed-Fi Alliance Staff MUST be able to override the assigned score based on human judgment, with the override and rationale recorded against the row's evidence record.
+- Ed-Fi Alliance Staff SHALL be able to override the assigned score based on human judgment, with the override and rationale recorded against the row's evidence record.
 - **NACHOS Score Context (peer signal).** Every scored row SHALL carry, beside the scalar: _Implementation Shape_ (structural complexity, deterministic from the Swagger/API model), _Documentation Style_ (Prescriptive | Conceptual | Cross-reference | Regulatory | Unspecified), and _Documentation Gap_ (complex structure the documentation under-explains).
 - **Semantic-fidelity adjustment.** When a state narrows, broadens, or changes the canonical Ed-Fi meaning of an element, apply an adjustment (exact magnitudes subject to Alliance methodology review).
 - **Evidence record (per row).** Every score SHALL emit a cached evidence record (extracted facts, confidence, cited spans, firing rule path, review routing) — extending the provenance model (NFR-DATA-2/3) to the scoring layer, so a score is inspectable without re-running the model.
@@ -225,8 +225,8 @@ graph TD
 
 - Standardized metadata storage with a schema that can represent normalized metadata plus provenance and curation status
 - The standardized repository SHALL preserve provenance and curation status for each material metadata element, including whether it came from exact artifact import, inexact supplemental extraction, or manual editing.
-- Phase 1 minimum acceptance: Ed-Fi Alliance Staff MUST be able to load, store, and manually curate standardized metadata in that repository even before any scoring or other downstream analytical consumer is delivered.
-- Ed-Fi Alliance Staff MUST be able to manually curate standardized metadata regardless of whether it originated from exact import or inexact extraction.
+- Phase 1 minimum acceptance: Ed-Fi Alliance Staff SHALL be able to load, store, and manually curate standardized metadata in that repository even before any scoring or other downstream analytical consumer is delivered.
+- Ed-Fi Alliance Staff SHALL be able to manually curate standardized metadata regardless of whether it originated from exact import or inexact extraction.
 - Phase 2 downstream-consumer readiness: the standardized repository SHALL expose standardized metadata programmatically to the scoring engine and other downstream use cases once those consumers are introduced.
 - The schema SHALL be at the **(resource, property) grain** and SHALL map state documentation onto the **canonical Ed-Fi Data Standard surface**, so a source lens and an API-model (coverage) lens are possible.
 - The repository SHALL retain the **source narrative text** (or stable, normalized references) sufficient to validate and display _cited spans_; a cited span cannot be shown against source text that was not retained. (The Phase-1 schema should anticipate this.)
@@ -277,7 +277,7 @@ graph TD
 - Storage of extracted information in a standardized format, with provenance and confidence indicators that distinguish supplemental extraction from exact artifact import
 - Given the variable nature of the source documents, it is not realistic to expect 100% accuracy from automated extraction. When automated extraction is first deployed in Phase 2, 80% accuracy is acceptable; 90% or better remains the desired later-state target.
 - The stated enrichment accuracy thresholds are decision points for reviewing the cost/benefit of additional tuning and manual curation, not automatic completion points.
-- Ed-Fi Alliance Staff MUST be able to manually review and edit enriched metadata based on human judgment
+- Ed-Fi Alliance Staff SHALL be able to manually review and edit enriched metadata based on human judgment
 - Future option: where explicitly enabled by Ed-Fi governance, SEA staff MAY be allowed to manually edit metadata; this does not need to be solved in the earlier phases.
 
 **Depends on:** JTBD 7 (Storage Engine)
@@ -346,7 +346,7 @@ Phase note: Phase 1 minimum acceptance is manual capture and storage of suppleme
 
 **Acceptance Criteria:**
 
-- Web-based GUI for browsing and discovering use cases
+- Web-based UI for browsing and discovering use cases
 - Data dictionary mapping between the use case's data elements and the data element names in the specifications
 
 **Depends on:** JTBD 7 (Storage Engine), JTBD 3, JTBD 9 (Use Case Mapping)
@@ -359,21 +359,18 @@ Phase note: Phase 1 minimum acceptance is manual capture and storage of suppleme
 
 **Acceptance Criteria:**
 
-- Must have: import / update from spreadsheet / CSV
-- Should have: ability to deprecate a mapping (and reverse)
-- Should have: ability to archive a mapping, hiding it from public view (and reverse)
-- Could have: other formats (to be determined)
-- Could have: web-based GUI for manual CRUD operations
-- Could have: tracking of vendors or agencies who support or require a given use case
-- Should have — edit rights:
-  - Original creator can edit the use case
-  - Ed-Fi Alliance Staff can edit the use case
-  - Original creator can share editing rights (delegate) with another user
-- Must have: anyone can read
-- Must have: user can set a status indicator showing if the mapping is:
-  - Work in progress
-  - Proposed
-  - Published / used in production
+- SHALL support import / update from spreadsheet / CSV
+- SHOULD support the ability to deprecate a mapping (and reverse)
+- SHOULD support the ability to archive a mapping, hiding it from public view (and reverse)
+- SHOULD support the following edit rights:
+  - Original creator SHALL be able to edit the use case
+  - Ed-Fi Alliance Staff SHALL be able to edit the use case
+  - Original creator SHALL be able to share editing rights (delegate) with another user
+- Anyone SHALL be able to read mappings
+- Users SHALL be able to set a status indicator showing if the mapping is work in progress, proposed, or published / used in production
+- Could include: support for other formats (to be determined)
+- Could include: web-based GUI for manual CRUD operations
+- Could include: tracking of vendors or agencies who support or require a given use case
 
 **Depends on:** JTBD 7 (Storage Engine), JTBD 3 (Standardization of Data Collection Metadata)
 
@@ -412,8 +409,8 @@ Phase note: strategically desirable and intentionally deferred until after the P
 **Acceptance Criteria:**
 
 - Storage of free text notes and potentially pre-defined fields
-- Must have: web-based GUI accessible only to Ed-Fi Alliance Staff
-- Could have (details to be determined): web-based GUI accessible to other personas
+- SHALL have: web-based UI accessible only to Ed-Fi Alliance Staff
+- Could have (details to be determined): web-based UI accessible to other personas
 
 **Depends on:** JTBD 7 (Storage Engine), JTBD 3
 
@@ -425,13 +422,13 @@ Phase note: strategically desirable and intentionally deferred until after the P
 
 **Acceptance Criteria:**
 
-- Must include at least these measures of attributes:
+- SHALL include at least these measures of attributes:
   - Number of attributes
   - Average complexity of attributes
 - Should have filtering / roll-up of attributes by:
   - Domain
   - Entity
-- Must have direct links to access and/or edit specification details
+- SHALL have direct links to access and/or edit specification details
 - Could have direct links to use case mappings that reference the state specification
 - Future option: make this available to external users, though the complexity analysis may need to remain private
 
@@ -448,8 +445,8 @@ Phase note: strategically desirable and intentionally deferred until after the P
 
 **Acceptance Criteria:**
 
-- Must be generated as a PDF
-- Should be created from an action on the web-based GUI dashboard
+- SHALL be generated as a PDF
+- Should be created from an action on the web-based UI dashboard
 
 **Depends on:** JTBD 7 (Storage Engine), JTBD 3, JTBD 12 (Dashboard)
 
@@ -461,12 +458,12 @@ Phase note: strategically desirable and intentionally deferred until after the P
 
 **Acceptance Criteria:**
 
-- The UI MUST have a queue showing new results that require review, with a label of "status: pending"
-- The UI MUST allow the reviewer to mark as approved, which will set "status: approved"
-- The UI MUST allow the reviewer to mark as rejected, which will set "status: rejected" (implies further work is needed, but could not be provided at that time)
-- The UI MUST allow the reviewer to update any data  manually, which will set "status: updated"
-  - When updating existing data, the system MUST retain the historical information for comparison
-  - When updating existing data, the system MUST require the user to provide evidence information
+- The UI SHALL have a queue showing new results that require review, with a label of "status: pending"
+- The UI SHALL allow the reviewer to mark as approved, which will set "status: approved"
+- The UI SHALL allow the reviewer to mark as rejected, which will set "status: rejected" (implies further work is needed, but could not be provided at that time)
+- The UI SHALL allow the reviewer to update any data  manually, which will set "status: updated"
+  - When updating existing data, the system SHALL retain the historical information for comparison
+  - When updating existing data, the system SHALL require the user to provide evidence information
 
 **Depends on:** JTBD 12
 
@@ -515,7 +512,7 @@ Phase note: strategically desirable and intentionally deferred until after the P
 
 ### NFR-SCALE: Scale and Availability
 
-- **NFR-SCALE-1:** Actual application use will be low volume. Web-based GUI applications need to be generally available during normal working hours, but do not require scale-out or high availability.
+- **NFR-SCALE-1:** Actual application use will be low volume. Web-based UI applications need to be generally available during normal working hours, but do not require scale-out or high availability.
 
 ### NFR-LICENSE: Licensing
 
@@ -537,7 +534,7 @@ Phase note: strategically desirable and intentionally deferred until after the P
 
 - **NFR-DATA-1:** Production database systems require standard weekly full backup, nightly differential backup, and documented rollback/restore processes.
 - **NFR-DATA-2:** The metadata repository MUST retain provenance, confidence, and curation status sufficient to distinguish exact artifact imports, inexact supplemental extraction, and manual edits.
-- **NFR-DATA-3:** When provenance or confidence would reasonably change whether a user trusts or acts on displayed metadata—for example, when a value came from inexact supplemental extraction rather than exact artifact import—the web-based GUI MUST surface that context to the user.
+- **NFR-DATA-3:** When provenance or confidence would reasonably change whether a user trusts or acts on displayed metadata—for example, when a value came from inexact supplemental extraction rather than exact artifact import—the web-based UI MUST surface that context to the user.
 
 ## 5. System Architecture
 
