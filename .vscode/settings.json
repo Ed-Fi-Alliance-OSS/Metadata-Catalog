@@ -79,7 +79,7 @@
             "style": "underscore"
         },
         "ul-style": {
-            "style": "asterisk"
+            "style": "consistent"
         }
     },
     "[markdown]": {
@@ -89,5 +89,8 @@
     },
     "editor.codeActionsOnSave": {
         "source.fixAll.markdownlint": "explicit"
-    }
+    },
+    "cSpell.words": [
+        "browsable"
+    ]
 }
