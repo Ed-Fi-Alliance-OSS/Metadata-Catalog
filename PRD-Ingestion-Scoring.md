@@ -21,14 +21,14 @@ Access the following PRD for an overview of the overall Metadata Project.  **Lin
 
 ### 1.2 Problem Statement
 
-Vendor integration costs are a widely-cited barrier to expanding K-12 data access. Those costs stem from complex, aggregated, and inconsistent requirements across states. Without a systematic way to extract and score SEA specification metadata, Ed-Fi staff have no scalable method to:
+Ed-Fi staff have no scalable method to:
 
 * Measure the complexity of a state's data collection requirements.
 * Compare complexity across states.
 * Identify which specific elements drive implementation burden.
 * Prioritize standardization conversations with the highest-leverage states.
 
-Manual scoring is slow, inconsistent across reviewers, and does not scale to the number of states and elements in scope. An LLM-assisted pipeline that produces auditable, human-overridable scores addresses all four gaps.
+Manual scoring is slow, inconsistent across reviewers, and does not scale to the number of states and elements in scope. The ingestion process, and an LLM-assisted pipeline that produces auditable, human-overridable scores produce the output for dashboards and other analytics, and the list of elements that require evaluation to reduce complexity.
 
 ### 1.3 Target Users for this PRD
 
@@ -73,41 +73,30 @@ The system SHALL support the following source types for supplemental business do
 
 The system SHALL validate that each provided file or URL is resolvable before proceeding. If a source fails validation, the system SHALL report the failure and allow the user to correct or remove the invalid entry without re-submitting valid sources.
 
-The output of the ingestion process SHALL contain one row per attribute with the following columns:
-
-| Column | Description |
-|---|---|
-| `entity_name` | Entity name as it appears in the state's Swagger |
-| `standard_entity` | Best-match entity name from the Ed-Fi Data Standard |
-| `domain` | Ed-Fi domain (e.g., Student, Enrollment, Assessment) |
-| `match_confidence` | High / Medium / Low / Unmatched |
-| `match_notes` | Flags for extension entities, renamed entities, or descriptor overloads |
-| `element_name` | Element name from the state definition |
-| `element_type` | Element type from the Ed-Fi Data Standard |
-| `element_cardinality` | Keys, optional, required, or optional conditional |
-| `business_logic` | Extracted business rule text (verbatim quoted span from source documentation) |
-| `cited_span` | Source document and page/section reference for the business logic |
-| `in_scope` | Boolean scope classification |
-
 #### 2.1.2 Entity Matching to Standard Domain
 
 **Story:** As a user, I want each element from the state Swagger matched to its Ed-Fi standard domain so that the ingestion output identifies the standard domain for every entity and surfaces any elements that could not be matched.
 
 After parsing the Swagger/OAS document(s), the system SHALL match each API entity (resource, descriptor, association) to its corresponding **Ed-Fi Data Standard domain definition** using a standard domain registry.
 
-The system SHALL produce a match result with the following columns at minimum:
+**Job Story** Each entity needs to be matched to a key domain based on the list of entities per domain provided, in this way, analysis across domains and states can be standardized.  For extended entities without a direct domain map, the process needs to map to the closest domain, based on the common names in the entity title, for example: coursetranscript_ext is very similar to coursetranscript, and therefore allocated to the same domain.  If the entity's name is completely different than an ed-fi entity, then the domain listed will be: state_specific.
+
+The process should try to match the extended entities to domain as much as possible.  
+
+**Job Story** Unmatched entities SHALL be flagged for staff review rather than silently dropped. Staff MAY resolve an unmatched entity by manually mapping it or marking it as a state-specific extension.
+
+The output of the ingestion process SHALL contain one row per attribute with the following columns:
 
 | Column | Description |
 |---|---|
 | `entity_name` | Entity name as it appears in the state's Swagger |
-| `standard_entity` | Best-match entity name from the Ed-Fi Data Standard |
+| `standard_entity` | Best-match entity name from the Ed-Fi Data Standard - CAN WE GET THIS?|
 | `domain` | Ed-Fi domain (e.g., Student, Enrollment, Assessment) |
 | `match_confidence` | High / Medium / Low / Unmatched |
 | `match_notes` | Flags for extension entities, renamed entities, or descriptor overloads |
-
-Unmatched entities SHALL be flagged for staff review rather than silently dropped. Staff MAY resolve an unmatched entity by manually mapping it or marking it as a state-specific extension.
-
-**Question: do we produce a report to pull elements that do not match other state definitions**
+| `element_name` | Element name from the state definition |
+| `element_type` | Element type from the Ed-Fi Data Standard |
+| `element_cardinality` | Keys, optional, required, or optional conditional |
 
 #### 2.1.3 Business Logic Extraction IDENTIFIED AS "JBTD 3: Standardization of Data Collection Metadata " in Initial PRD
 
@@ -189,7 +178,7 @@ The resulting NACHOS scores and Adjusted NACHOS score for each record have all t
 * All the Drivers for adjustment (necessary extension | Unnecessary extension | cross-entity logic)
 * Extension_justification  (why is necessary, or standalone)
 * Semantic_fidelity (TO BE CONFIRMED: narrowed/broadened/divergent?)
-* Definition qualty (present, >= 20 chars, implementable)
+* Definition quality (present, >= 20 chars, implementable)
 * Element name alignment (matches Ed-Fi's name)
 
 The system SHALL run a Scoring LLM against each in-scope element record produced by the Ingestion Pipeline. For each element the LLM SHALL extract and emit an **evidence record** containing, at minimum:
@@ -232,7 +221,7 @@ The system SHALL run a Scoring LLM against each in-scope element record produced
 
 The scoring logic SHALL implement the rule cascade defined in the **POC Recommendation document (page 11)**. The rule cascade determines which combination of extracted flags maps to which NACHOS tier and drives the `firing_rule_path` and `tier_name` fields in the evidence record.
 
-> [!IMPORTANT]
+> [!IMPORTANT - NOT REALLY]
 > Reference: _POC Recommendation document, page 11 — Rule Cascade table_. The rule cascade is the authoritative source for score assignment logic. Any discrepancy between this PRD and that document should be resolved in favor of the POC Recommendation document pending a formal methodology review.
 
 Staff SHALL be able to inspect the full `firing_rule_path` and `tier_name` for any scored element to understand exactly which rules fired and which tier was matched.
@@ -271,7 +260,7 @@ The system SHALL write scores and evidence records to the storage database upon 
 
 The evidence record SHALL be stored in full so that any score is inspectable without re-running the model.
 
-The system SHALL maintain a scoring history table that records each override or state-specific rule addition, preserving the prior score, the change applied, the rationale, and the rescored result.
+The system SHALL maintain a scoring history table that records each override or state-specific rule addition, preserving the prior score, the change applied, the rationale, and the re-scored result.
 
 ---
 
