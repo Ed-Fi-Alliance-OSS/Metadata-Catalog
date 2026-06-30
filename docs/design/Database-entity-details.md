@@ -1,6 +1,9 @@
 # Database Entity Details
 
-Each section below describes one database entity (table).
+This document lists the entities and fields collected by the POC-3 pipeline.
+Because the backend database is not finalized yet, it focuses on what each
+stage produces (ingest, phase-A facts, and phase-C scoring) and how updates are
+handled (snapshot-replace or status-upsert).
 
 ---
 
